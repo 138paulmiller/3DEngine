@@ -4,8 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <glm/glm.hpp>
 
-#include "glm/glm.hpp"
 #include "log.h"
 class Shader
 {
