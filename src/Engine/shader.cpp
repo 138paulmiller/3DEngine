@@ -82,12 +82,21 @@ void Shader::setUniformFloat(std::string id,  GLfloat value)
         glUniform1f(location, value);
 }
 
-void Shader::setUniformVector(std::string id, const GLfloat* vector, GLuint numComponents)
+void Shader::setUniformArray(std::string id, const GLfloat* array, GLuint count)
 {
     int location = getUniformLocation(id);
     //set the vector as you would an array since in GLSL vectors are "essentially" arrays
     if(location >= 0)
-        glUniform1fv(location, numComponents, vector);
+        //array of size count with 1 component elements
+        glUniform1fv(location, count, array);
+}
+void Shader::setUniformVec3(std::string id, const glm::vec3& vector)
+{
+    int location = getUniformLocation(id);
+    //set the vector as you would an array since in GLSL vectors are "essentially" arrays
+    if(location >= 0)
+        //only 1 3 component vector
+        glUniform3fv(location, 1, &vector[0]);
 }
 void Shader::setUniformMatrix4(std::string id, const glm::mat4& matrix)
 {

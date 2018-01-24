@@ -1,18 +1,22 @@
 #ifndef MODEL_H
 #define MODEL_H
+#include <vector>
+#include <sstream>
+#include <glm/gtx/transform.hpp>
 
 #include "mesh.h"
 #include "shader.h"
-#include <vector>
-#include <sstream>
+#include "material.h"
 // after <glm/glm.hpp>
-#include "glm/gtx/transform.hpp"
 class Model
 {
 public:
-    Model(Shader* shader, Mesh * mesh);
+    Model(Shader* shader, Mesh * mesh, Material * material);
     ~Model();
 
+
+    void setMaterial(Material*material);
+    
     void setShader(Shader* shader);
     //Render the model, with the given view projection matrix, and the viewer pos
     void render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye );
@@ -28,8 +32,9 @@ public:
     //all transformations - scale, rotate then translate
     inline glm::mat4 getTransform(){return m_translation* m_rotation * m_scale;}
 private:
-    Mesh *mesh;
-    Shader* shader;
+    Mesh *m_mesh;
+    Shader* m_shader;
+    Material *m_material; //texture and shading
     //Translation, scale, and rotation matrix
     glm::mat4 m_scale;
     glm::mat4 m_translation;

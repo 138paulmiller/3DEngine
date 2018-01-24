@@ -1,5 +1,5 @@
 #version 130
-
+//Basic attributes and uniforms for vertex shader
 //Streamed values
 attribute vec3 v_position;
 attribute vec3 v_normal;

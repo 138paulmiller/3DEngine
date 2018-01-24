@@ -25,7 +25,7 @@ namespace Log
     {
     public:
         friend std::ostream& operator<<(std::ostream& os, const Error& error) {
-            return os << "\033[" <<FG_RED <<"m" <<"ERROR! at " << __FILE__ << ":" << __LINE__  << "\n\t";
+            return os << "\033[" <<FG_RED <<"m";
         }
 
     };
@@ -55,8 +55,12 @@ namespace Log
     static void close() { *Log::p_out << "\033[" << Log::FG_DEFAULT << "m" << "\033[" << Log::BG_DEFAULT << "m";}
 
 }
+
+//Macro to simplify error handling
+#define error() errorAt(__FILE__, __LINE__)
+
 //qDebug()-like behavior
-static std::ostream& error(){return *Log::p_out << Log::p_error;}
+static std::ostream& errorAt(const char* filename, int line){return *Log::p_out << Log::p_error << "ERROR! at " << filename << ":" <<line << "\n\t";}
 static std::ostream& warn() {return *Log::p_out << Log::p_warn;}
 static std::ostream& debug() {return *Log::p_out << Log::p_debug;}
 

@@ -19,8 +19,10 @@ public:
 
     GLuint getAttribLocation(std::string id);
     GLuint getUniformLocation(std::string id);
+    
     void setUniformFloat(std::string id, GLfloat value);
-    void setUniformVector(std::string id, const GLfloat* vector, GLuint numComponents);
+    void setUniformArray(std::string id, const GLfloat* array, GLuint count);
+    void setUniformVec3(std::string id, const glm::vec3& vector);
     void setUniformMatrix4(std::string id, const glm::mat4& matrix);
 
 protected:

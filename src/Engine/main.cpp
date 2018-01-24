@@ -1,6 +1,7 @@
 #include "window.h"
 #include "model.h"
 #include "camera.h"
+
 int main(int argc, char**argv)
 {
     //open log with std::cout
@@ -18,7 +19,17 @@ int main(int argc, char**argv)
     Shader shader("glsl/phong");
     if(!shader.valid())
         return -1;
+    
     Model* suzanne = Model::loadObj(&shader, "res/suzanne.obj");
+    
+    Material materialGold(&shader,
+        glm::vec3(0.24725,0.1995,0.0745), //ambient
+        glm::vec3(0.75164,0.60648,0.22648),   //diffuse
+        glm::vec3(0.628281,0.555802,0.366065),//specular
+        0.4*128//shiniess
+        );
+
+    suzanne->setMaterial(&materialGold);
     float time=0;
     int mouseX, mouseY;
     while(window.isOpen())

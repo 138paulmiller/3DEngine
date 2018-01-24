@@ -1,7 +1,7 @@
 #include "model.h"
 
-Model::Model(Shader* shader, Mesh * mesh)
-    :shader(shader), mesh(mesh)
+Model::Model(Shader* shader, Mesh * mesh, Material * material)
+    :m_shader(shader), m_mesh(mesh), m_material(material)
 {
     //identity matrix
     m_scale = glm::mat4(1);
@@ -12,27 +12,32 @@ Model::Model(Shader* shader, Mesh * mesh)
 
 Model::~Model()
 {
-    //only delete mesh, not shader. Shaders are shared
-    if(mesh)
-        delete mesh;
+    //only delete mesh. Shaders and material are shared
+    if(m_mesh)
+        delete m_mesh;
 }
 //view projection matrix,
 void Model::render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye )
 {
-    shader->use();
+    m_shader->use();
     //set modelMatrix in shader
-    shader->setUniformVector("v_eye", &eye[0], 3); //set the "eye" vectors
-    shader->setUniformMatrix4("m_view", view);
-    shader->setUniformMatrix4("m_projection", projection);
-    shader->setUniformMatrix4("m_model", getTransform());
-    mesh->render();
+    m_shader->setUniformVec3("v_eye", eye); //set the "eye" vectors
+    m_shader->setUniformMatrix4("m_view", view);
+    m_shader->setUniformMatrix4("m_projection", projection);
+    m_shader->setUniformMatrix4("m_model", getTransform());
+    m_material->bind(); //bind material
+    m_mesh->render();
 }
-
+void Model::setMaterial(Material* material)
+{
+    if(material)
+        m_material = material;
+}
 
 void Model::setShader(Shader* shader)
 {
     if(shader)
-        this->shader = shader;
+        m_shader = shader;
 }
 Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
 {
@@ -45,6 +50,9 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
     std::vector<GLuint> indices;
     GLuint indexCount = 0;
     std::ifstream inFile(objFile);
+
+    Material *material  = 0;
+    Mesh* mesh = 0;
     if(inFile.is_open())
     {
         std::string line, tag, temp;
@@ -131,13 +139,17 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
 
             }
             else if(tag == "usemtl")
-            {}
+            {
+                //TODO
+                //load material coeffs from mtl file with same basename!
+            }
             //clear any flags and reset buffer as empty
             oss.str("");
             oss.clear();
         }
+        mesh = new Mesh(shader, &vertices[0], vertices.size(), &indices[0], indices.size(), dynamic);
         //pass shader to mesh to allow Mesh to get locations of vertex attributes
-        model = new Model(shader, new Mesh(shader, &vertices[0], vertices.size(), &indices[0], indices.size(), dynamic));
+        model = new Model(shader, mesh,material);
 
     }
     else
