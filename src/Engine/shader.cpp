@@ -2,6 +2,7 @@
 
 Shader::Shader(std::string filename)
 {
+	m_valid = 1; //default true
     m_shaders[VERTEX] = loadShader(filename+".vs", GL_VERTEX_SHADER);
     m_shaders[FRAGMENT] = loadShader(filename+".fs", GL_FRAGMENT_SHADER);
     //link programs
@@ -9,13 +10,15 @@ Shader::Shader(std::string filename)
     for(int i = 0; i < NUM_SHADERS; i++)
         glAttachShader(m_program, m_shaders[i]);
     glLinkProgram(m_program);
-    debug() << "Linking program ...\n";
+    Log::debug() << "Linking program ...\n";
     if(m_valid)
         m_valid = checkError(m_program, GL_LINK_STATUS, true);
     glValidateProgram(m_program);
-    debug() << "Validating program ...\n";
-    if(m_valid)
+ 	Log::debug() << "Validating program ...\n";
+ 	if(m_valid)
         m_valid = checkError(m_program, GL_VALIDATE_STATUS, true);
+    else
+		Log::debug() << "Shader valid! ...\n";
 }
 
 
@@ -50,11 +53,12 @@ GLuint Shader::loadShader(std::string filename, GLuint type)
         fileIn.close();
     }
     //Compile program
+    Log::debug() << "\nCompiling " << (type==GL_VERTEX_SHADER?"VERTEX":"FRAGMENT") << " shader \n";
+ 
     GLuint shader = glCreateShader(type);
     const GLchar* source = (GLchar*)(text.c_str());
     glShaderSource(shader, 1, &source, 0);
     glCompileShader(shader);
-    debug() << "\nCompiling " << (type==GL_VERTEX_SHADER?"VERTEX":"FRAGMENT") << " shader \n";
     if(!checkError(shader, GL_COMPILE_STATUS))
         m_valid = shader = 0;
     return shader;
@@ -62,24 +66,26 @@ GLuint Shader::loadShader(std::string filename, GLuint type)
 
 GLuint Shader::getAttribLocation(std::string id)
 {
+	use();
     int location = glGetAttribLocation(m_program, id.c_str());
     if(location < 0)
-        error() << "Shader: Could not get attrib:" << id << " \n";
+        Log::warn() << "Shader: Could not get attrib: " << id << " \n";
     return location;
 }
 GLuint Shader::getUniformLocation(std::string id)
 {
+	use();
     int location = glGetUniformLocation(m_program, id.c_str());
-    if(location< 0)
-        error() << "Shader: Could not get uniform:" << id << " \n";
+    if(location < 0)
+        Log::warn() << "Shader: Could not get uniform: " << id << " \n";
     return location;
 }
-void Shader::setUniformFloat(std::string id,  GLfloat value)
+void Shader::setUniformFloat(std::string id, GLfloat value)
 {
-    int location = getUniformLocation(id);
-    //set the vector as you would an array since in GLSL vectors are "essentially" arrays
+	int location = getUniformLocation(id);
     if(location >= 0)
         glUniform1f(location, value);
+
 }
 
 void Shader::setUniformArray(std::string id, const GLfloat* array, GLuint count)
@@ -122,11 +128,11 @@ bool Shader::checkError(GLuint shader, GLuint flag,  bool isProgram)
         isProgram?
             glGetProgramInfoLog(shader, errorLen, &errorLen, errorMsg)
             :glGetShaderInfoLog(shader, errorLen, &errorLen, errorMsg);
-        error() << errorMsg;
+        Log::error() << "Shader Log: " << errorMsg << "\n";
         delete errorMsg;
         return false;
    }
-    return true;
+   return true;
 }
 
 void Shader::use()

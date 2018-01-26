@@ -3,65 +3,84 @@
 #include <iostream>
 #include <string>
 /*
-    Box of Static class to ease writing messages to SDTOUT
+    Box of Static class to ease writing messages to stream
 */
+
+//
 namespace Log
 {
-    enum Color{
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_YELLOW   = 33,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_YELLOW    = 43,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
+	enum Color{
+	    FG_RED      = 31,
+	    FG_GREEN    = 32,
+	    FG_YELLOW   = 33,
+	    FG_BLUE     = 34,
+	    FG_DEFAULT  = 39,
+	    BG_RED      = 41,
+	    BG_GREEN    = 42,
+	    BG_YELLOW    = 43,
+	    BG_BLUE     = 44,
+	    BG_DEFAULT  = 49
+	};
+			
+	class Error
+	{
+	public:
+	    friend std::ostream& operator<<(std::ostream& os, const Error& error) {
+	        return os << "\033[" <<FG_RED <<"m";
+	    }
+	};
+	
+	class Debug
+	{
+	public:
+	    friend std::ostream& operator<<(std::ostream& os, const Debug& mod) {
+	        return os << "\033[" << FG_DEFAULT << "m";
+		}
+	};
 
+	class Warn
+	{
+	public:
+	    friend std::ostream& operator<<(std::ostream& os, const Warn& mod) {
+	        return os << "\033[" << FG_YELLOW << "mWarning:";
+		}
+	};
 
-    class Error
-    {
-    public:
-        friend std::ostream& operator<<(std::ostream& os, const Error& error) {
-            return os << "\033[" <<FG_RED <<"m";
-        }
+	//singletons to stream output
+	static Error s_error;
+	static Warn s_warn;
+	static Debug s_debug;
 
-    };
-    class Debug
-    {
-    public:
-        friend std::ostream& operator<<(std::ostream& os, const Debug& mod) {
-            return os << "\033[" << FG_DEFAULT << "m";
-        }
+	static std::ostream* s_out = &std::cout; //reference to current output stream, default is cout
 
-    };
-    class Warn
-    {
-    public:
-        friend std::ostream& operator<<(std::ostream& os, const Warn& mod) {
-            return os << "\033[" << FG_YELLOW << "mWarning:";
-        }
+	
+	//Set the log stream
+    static void open(std::ostream* out = &std::cout) {
+		s_out =out;
+	}
+    static void close() { 
+		*s_out << "\033[" << FG_DEFAULT << "m" << "\033[" << BG_DEFAULT << "m";
+	}
+ 
+	
+	//Macros to abstract function calls and allow log::error, log::warn streaming!
+	//use __FILE__ and __LINE__, to get line where macro was called (text substitution :)
+	//#define error error_(__FILE__, __LINE__)
+	//#define warn warn_()
+	//#define debug debug_() 
+	//"Private functions" to be called by macros
+	#define error() errorAt(__FILE__, __LINE__)
 
-    };
-    //singletons to be returned to output
-    static Error p_error;
-    static Debug p_debug;
-    static Warn p_warn;
-    static std::ostream* p_out = &std::cout; //reference to current output stream, default is cout
-
-    static void open(std::ostream* out = &std::cout) {p_out =out;}
-    static void close() { *Log::p_out << "\033[" << Log::FG_DEFAULT << "m" << "\033[" << Log::BG_DEFAULT << "m";}
+	static std::ostream& errorAt(const char* filename, int line){
+		return *s_out << s_error << "ERROR! at " << filename << ":" <<line << "\n\t";
+	}
+	static std::ostream& warn() {
+		return *s_out << s_warn;
+	}
+	static std::ostream& debug() {
+		return *s_out << s_debug;
+	}
 
 }
-
-//Macro to simplify error handling
-#define error() errorAt(__FILE__, __LINE__)
-
-//qDebug()-like behavior
-static std::ostream& errorAt(const char* filename, int line){return *Log::p_out << Log::p_error << "ERROR! at " << filename << ":" <<line << "\n\t";}
-static std::ostream& warn() {return *Log::p_out << Log::p_warn;}
-static std::ostream& debug() {return *Log::p_out << Log::p_debug;}
 
 #endif // LOG_H

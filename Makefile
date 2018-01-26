@@ -21,38 +21,51 @@ OBJECTS= $(patsubst %, $(OBJ_DIR)/%.o, \
 		$(notdir $(basename \
 		$(shell find $(SRC_DIR) -type f -name '*.cpp')))) 	
 
+# Objects may not exist yet, so build when needed
+.PHONY : clean
+
 Debug: all
 	@echo Debug Build Complete
 
 Release : all
 	@echo Release Build Complete
 
+Rebuild : clean all
+	@echo Rebuild Complete
 
 all: $(OBJECTS)
 	$(CC) -o $(OUT) $^ $(CPPFLAGS)
 
 #If obj does not exist(not compiled), compile it into build dir 
 $(OBJECTS): $(OBJ_DIR)
-	$(CC) 	-I$(INC_DIR) \
-		$(CPPFLAGS) \
+	@if [ ! -e "$@" ]; then \
+	echo "$(CC) -I$(INC_DIR) $(CPPFLAGS) -c $(shell find $(SRC_DIR) -type f -name $(notdir $(basename $@)).cpp) -o $(OBJ_DIR)/$(notdir $@);"; \
+		$(CC) -I$(INC_DIR) $(CPPFLAGS) \
 		-c $(shell find $(SRC_DIR) -type f -name $(notdir $(basename $@)).cpp) \
-		-o $(OBJ_DIR)/$(notdir $@)
+		-o $(OBJ_DIR)/$(notdir $@); \
+	fi
 		
 
 # Create build directory for objects files
 $(OBJ_DIR):
-	@echo $(OBJECTS)
 	@mkdir $@
 
-# Objects may not exist yet, so build when needed
-.PHONY : clean
-
 cleanDebug: clean
-	@echo Clean Debug
+	@echo Debug
 
 
 cleanRelease: clean
-	@echo Clean Release
+	@echo Release
 
+#If remove fails, contiue
 clean:
-	rm -r $(OBJ_DIR) $(OUT)
+	@if [ -e $(OBJ_DIR) ]; then \
+	rm -r $(OBJ_DIR); \
+	fi; 
+	@if [ -e $(OUT) ]; then \
+	rm -r $(OUT); \
+	fi; 
+	@echo Cleaned
+
+	
+

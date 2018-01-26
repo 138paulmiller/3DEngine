@@ -12,6 +12,7 @@ public:
            glm::vec3 m_target=glm::vec3(0,0,0),
            glm::vec3 m_up=glm::vec3(0,1,0));
 
+	void setPosition(glm::vec3 pos);
     glm::mat4 getView();
     glm::vec3 getEye();
 private:

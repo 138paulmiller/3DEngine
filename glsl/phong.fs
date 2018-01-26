@@ -11,16 +11,15 @@ struct material
     //specular color of object
     vec3 specular;  
 };
-
 uniform material mtl; //material definitions
-uniform float mtlspecular;
+
 
 uniform float time;
 uniform sampler2D sampler0;
 
 
 smooth in vec3 normal;	//vertex normals
-in vec3 position;   //position
+smooth in vec3 position;   //position
 in vec2 textureUV;	//texture coords
 in vec3 eye;
 
@@ -28,10 +27,9 @@ void main()
 {
 
     vec3 color = texture2D(sampler0, textureUV).xyz;
-
 //LIGHT TODO
-    //material defs from http://devernay.free.fr/cours/opengl/materials.html
-    vec3 light_pos  = vec3(sin(time),1,1); //hard code for now
+
+    vec3 light_pos  = vec3(0,0,sin(time)); //hard code for now
 
 
     //diffuse color for light

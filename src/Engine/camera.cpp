@@ -7,6 +7,11 @@ Camera::Camera(glm::vec3 position, glm::vec3 dir, glm::vec3 up)
     m_up = up;
 }
 
+
+void Camera::setPosition(glm::vec3 pos)
+{
+	m_position = pos;
+}
 glm::mat4 Camera::getView()
 {
 //    return glm::lookAt(m_position, m_target, m_up);
@@ -15,5 +20,5 @@ glm::mat4 Camera::getView()
 
 glm::vec3 Camera::getEye()
 {
-    return m_position+m_dir;
+    return m_position;
 }

@@ -12,8 +12,8 @@ uniform mat4 m_view;
 uniform mat4 m_projection;
 
 //to be sent to frag shader
-out vec3 position;
 smooth out vec3 normal;
+smooth out vec3 position;
 out vec2 textureUV;
 out vec3 eye; //view vector
 void main(){

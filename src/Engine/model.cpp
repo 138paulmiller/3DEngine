@@ -5,7 +5,6 @@ Model::Model(Shader* shader, Mesh * mesh, Material * material)
 {
     //identity matrix
     m_scale = glm::mat4(1);
-    //deafult zero
     m_rotation= glm::mat4(1);
     m_translation= glm::mat4(1);
 }
@@ -152,8 +151,8 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
         model = new Model(shader, mesh,material);
 
     }
-    else
-        error() << "File not found:" << objFile;
+  //  else
+ //       Log::error << "Model::loadObj: File not found:" << objFile;
 
     return model;
 }

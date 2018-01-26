@@ -3,34 +3,35 @@
 Window::Window(std::string title, int width, int height)
 {
 
-        if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
-            error() << "Window:" << "SDL Failed to initialize!";
-        m_sdlWindow = SDL_CreateWindow(title.c_str(),
+        if(SDL_Init(SDL_INIT_EVERYTHING) < 0){
+            Log::error() << "Window:" << "SDL Failed to initialize!";
+			return;		
+		}        
+		m_sdlWindow = SDL_CreateWindow(title.c_str(),
                                     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                     width, height, SDL_WINDOW_OPENGL);
         m_glContext = SDL_GL_CreateContext(m_sdlWindow);
-        if(glewInit() != GLEW_OK)
-            error() << "Window:"  << "GLEW Failed to initialize";
-        else{
-            m_isOpen = true;
-            glewExperimental = true;
-            //Initialize opengl color attributes buffer size
-            SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-            SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-            SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-            SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-            SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-            SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 2);
-            SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32); //very deep buffer
+        if(glewInit() != GLEW_OK){
+            Log::error() << "Window:"  << "GLEW Failed to initialize";
+			return;		
+		}
+        m_isOpen = true;
+        glewExperimental = true;
+        //Initialize opengl color attributes buffer size
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 2);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32); //very deep buffer
 
-            m_width = width;
-            m_height= height;
-            m_mouseX = m_mouseY = m_pmouseX = m_pmouseY = 0;
-            for(int i=0; i < KNUM; i++)
-                m_keymap[i] = UP;
-            m_time = m_ptime = 0;
-
-        }
+        m_width = width;
+        m_height= height;
+        m_mouseX = m_mouseY = m_pmouseX = m_pmouseY = 0;
+        for(int i=0; i < KNUM; i++)
+            m_keymap[i] = UP;
+        m_time = m_ptime = 0;
 }
 Window::~Window()
 {
@@ -76,6 +77,8 @@ int Window::getHeight() const
 void Window::clear(float red, float green, float blue, float alpha)
 {
     glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
     glClearColor(red,green,blue,alpha);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

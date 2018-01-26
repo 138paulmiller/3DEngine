@@ -11,7 +11,8 @@ Vertex::Vertex(const Vertex& other)
 
 Mesh::Mesh(Shader* shader, Vertex *vertices, GLuint numVertices, GLuint * indices, GLuint numIndices, bool dynamic )
 {
-    if(shader == 0) return;
+    if(shader == 0)  //check shader!
+		return;
     //create 1 VAO
     glGenVertexArrays(1, &m_vertexArray);
     //create the buffers
@@ -38,25 +39,28 @@ Mesh::Mesh(Shader* shader, Vertex *vertices, GLuint numVertices, GLuint * indice
     GLuint attrNormal = shader->getAttribLocation("v_normal");
     GLuint attrTextureUV = shader->getAttribLocation("v_textureUV");
 
-    if(attrPosition==-1 )
-        error() << "Position Attribute Not found!\n";
-    else
+    if(attrPosition < 0 ){
+        Log::error() << "Mesh: Position Attribute Not found!\n";
+    }
+	else
     {
         glVertexAttribPointer(attrPosition , 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(0*sizeof(GL_FLOAT)));
         glEnableVertexAttribArray(attrPosition );
     }
 
-    if(attrNormal==-1 )
-        error() << "Normal Attribute Not found!\n";
-    else
+    if(attrNormal < 0 ){
+        Log::error() << "Mesh: Normal Attribute Not found!\n";
+    }
+	else
     {
         glVertexAttribPointer(attrNormal, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(3*sizeof(GL_FLOAT)));
         glEnableVertexAttribArray(attrNormal);
     }
 
-    if(attrTextureUV==-1 )
-        error() << "Texture Attribute Not found!\n";
-    else
+    if(attrTextureUV < 0 ){
+        Log::error() << "Mesh: Texture Attribute Not found!\n";
+    }
+	else
     {
         glVertexAttribPointer(attrTextureUV, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(6*sizeof(GL_FLOAT)));
         glEnableVertexAttribArray(attrTextureUV);
