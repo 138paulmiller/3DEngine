@@ -102,13 +102,13 @@ void Shader::setUniformVec3(std::string id, const glm::vec3& vector)
     //set the vector as you would an array since in GLSL vectors are "essentially" arrays
     if(location >= 0)
         //only 1 3 component vector
-        glUniform3fv(location, 1, &vector[0]);
+        glUniform3fv(location, 1, glm::value_ptr(vector));
 }
 void Shader::setUniformMatrix4(std::string id, const glm::mat4& matrix)
 {
     int location = getUniformLocation(id);
     if(location >= 0)
-        glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 

@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 #include <glm/glm.hpp>
-
+#include <glm/gtc/type_ptr.hpp> // value_ptr
 #include "log.h"
 class Shader
 {

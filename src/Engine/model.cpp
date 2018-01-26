@@ -118,7 +118,7 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
                 {
                     //indices start at 1 for objs
                     // so grab from vector at i-1
-                    //write as "v/vt/vn " to parse
+                    //write as "v/vt/vn " to parse or v/vt/vn
                     oss.str("");
                     oss.clear();
                     oss << lines[i] << ' ';
@@ -127,7 +127,10 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
                     vertex.position = positions[std::stoi(temp)-1];
                     //get texture uv
                     std::getline(oss, temp, '/');
-                    vertex.textureUV = textureUVs[std::stoi(temp)-1];
+                    if(temp.size()==0)
+                        vertex.textureUV = glm::vec2(0);
+                    else    
+                        vertex.textureUV = textureUVs[std::stoi(temp)-1];
                     //get normal
                     std::getline(oss, temp, ' ');
                     vertex.normal = normals[std::stoi(temp)-1];
@@ -148,7 +151,7 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
         }
         mesh = new Mesh(shader, &vertices[0], vertices.size(), &indices[0], indices.size(), dynamic);
         //pass shader to mesh to allow Mesh to get locations of vertex attributes
-        model = new Model(shader, mesh,material);
+        model = new Model(shader, mesh, material);
 
     }
   //  else
