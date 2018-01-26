@@ -5,18 +5,19 @@
 #include <glm/gtx/transform.hpp>
 
 #include "mesh.h"
-#include "shader.h"
+#include "texture.h"
 #include "material.h"
+
 // after <glm/glm.hpp>
 class Model
 {
 public:
-    Model(Shader* shader, Mesh * mesh, Material * material);
+    Model(Shader* shader, Mesh * mesh, Material * material, Texture *texture);
     ~Model();
 
 
     void setMaterial(Material*material);
-    
+    void setTexture(Texture* texture);
     void setShader(Shader* shader);
     //Render the model, with the given view projection matrix, and the viewer pos
     void render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye );
@@ -25,7 +26,7 @@ public:
     //Rotates along vecs where 1 in xyz or z is the axis
     inline void rotate(GLfloat angle, glm::vec3 axis)   {m_rotation = glm::rotate( angle, axis);}
 
-    inline void scale(glm::vec3 scaleVector)    {m_scale = glm::scale( scaleVector);}
+    inline void scale(glm::vec3 scaleVector) {m_scale = glm::scale( scaleVector);}
 
     inline void translate(glm::vec3 translateVector)    {m_translation= glm::translate( translateVector);}
 
@@ -34,7 +35,8 @@ public:
 private:
     Mesh *m_mesh;
     Shader* m_shader;
-    Material *m_material; //texture and shading
+    Material *m_material; //shading coefficients
+    Texture *m_texture;
     //Translation, scale, and rotation matrix
     glm::mat4 m_scale;
     glm::mat4 m_translation;

@@ -8,7 +8,7 @@ Material::Material(Shader* shader, glm::vec3 ambient, glm::vec3 diffuse,glm::vec
 	m_shininess(shininess)
 {
 	if(!shader)
-		Log::error() << "Material has null shader!\n";
+		Log::error() << "Material: null shader!\n";
 }
 
 Material::~Material()

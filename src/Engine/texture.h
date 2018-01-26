@@ -2,16 +2,26 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <glm/glm.hpp>
-
+#include <GL/glew.h>
 #include "shader.h"
+
+/*
+	Basic 2D Texture
+*/
 class Texture
 {
 public:
-	Texture(Shader* shader, const char* data);
+	//which texture sample in shader 0-3
+	enum Sample 
+	{
+		SAMPLE_0=0,
+		SAMPLE_1,SAMPLE_2, 
+		SAMPLE_3
+	};
+	Texture(Shader* shader, const GLchar* data, GLuint imgWidth, GLuint imgHeight, Sample sample);
 	virtual ~Texture();
-	//load from Mtl file
-	//static Texture *loadTexture(std::string filename);
+	//load from PNG file
+	//static Texture *loadPNG(std::string filename);
 	
 	//Bind for shader to use 
 	virtual void bind();
@@ -20,8 +30,10 @@ public:
 private:
 	//Teture to bind
 	GLuint m_texture;
-	//reference to shader to be used
-	Shader* shader; 
+	//uniform location
+	Sample m_sample;
+	//Shader to bind to
+	Shader * m_shader;
 };
 
 #endif

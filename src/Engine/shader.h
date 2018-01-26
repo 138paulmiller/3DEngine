@@ -1,9 +1,9 @@
 #ifndef SHADER_H
 #define SHADER_H
-#include <GL/glew.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp> // value_ptr
 #include "log.h"
@@ -20,6 +20,7 @@ public:
     GLuint getAttribLocation(std::string id);
     GLuint getUniformLocation(std::string id);
     
+    void setUniformInt(std::string id, GLint value);
     void setUniformFloat(std::string id, GLfloat value);
     void setUniformArray(std::string id, const GLfloat* array, GLuint count);
     void setUniformVec3(std::string id, const glm::vec3& vector);

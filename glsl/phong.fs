@@ -26,10 +26,11 @@ in vec3 eye;
 void main()
 {
 
-    vec3 color = texture2D(sampler0, textureUV).xyz;
-//LIGHT TODO
+    vec4 baseSample = texture2D(sampler0, textureUV);
+    
+    //LIGHT TODO
 
-    vec3 l_pos  = vec3(3*sin(time),cos(time)*3,sin(time)*3); //hard code for now
+    vec3 l_pos  = vec3(0,0,0); //hard code for now
 
     //diffuse color for light
     vec3 l_d = vec3(1.0,1.0,1.0);
@@ -69,5 +70,6 @@ void main()
     //phong = ambient + foreach(light){diffuse + specular } 
 
     gl_FragColor = vec4(ambient+diffuse+specular, 1.0);
+//    gl_FragColor = baseSample*vec4(ambient+diffuse+specular, 1.0);
 
 }

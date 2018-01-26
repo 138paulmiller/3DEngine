@@ -10,13 +10,13 @@ data += 4; \
 }
 #endif
 
-namespace Wood{
-static unsigned int width = 600;
-static unsigned int height = 600;
-static char *data;
+struct Wood{
+static const unsigned int width = 600;
+static const unsigned int height = 600;
+static const char *data;
 };
 
-static char *Wood::data =
+const char *Wood::data =
 	"B6-QBF1RC&9TC6=UC6=UC&9TBF1RB6-QD&IXCFAVC&9TB6-QAV%OA5]MA%YL@EYK"
 	"A&!K@6!J@6!J@%]I@%]I?UYH?UYH?UYH?UYH?UYH?UYH?EUG?UYH@%]I@6!J@U]J"
 	"@5MGAEYJB6%MBF)NB6%MB&!LB&!LB6%MBF)NAEYJ@EIF@UMGB&!LC&1PCF9RC65Q"

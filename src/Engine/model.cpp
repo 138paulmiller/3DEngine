@@ -1,7 +1,7 @@
 #include "model.h"
 
-Model::Model(Shader* shader, Mesh * mesh, Material * material)
-    :m_shader(shader), m_mesh(mesh), m_material(material)
+Model::Model(Shader* shader, Mesh * mesh, Material * material, Texture* texture)
+    :m_shader(shader), m_mesh(mesh), m_material(material), m_texture(texture)
 {
     //identity matrix
     m_scale = glm::mat4(1);
@@ -24,13 +24,21 @@ void Model::render( const glm::mat4& projection, const glm::mat4& view, const gl
     m_shader->setUniformMatrix4("m_view", view);
     m_shader->setUniformMatrix4("m_projection", projection);
     m_shader->setUniformMatrix4("m_model", getTransform());
-    m_material->bind(); //bind material
+    if(m_material)
+        m_material->bind(); //bind material
+    if(m_texture)
+        m_texture->bind();
     m_mesh->render();
 }
 void Model::setMaterial(Material* material)
 {
     if(material)
         m_material = material;
+}
+void Model::setTexture(Texture * texture)
+{
+    if(texture)
+        m_texture = texture;
 }
 
 void Model::setShader(Shader* shader)
@@ -52,6 +60,7 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
 
     Material *material  = 0;
     Mesh* mesh = 0;
+    Texture* texture = 0;
     if(inFile.is_open())
     {
         std::string line, tag, temp;
@@ -128,7 +137,8 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
                     //get texture uv
                     std::getline(oss, temp, '/');
                     if(temp.size()==0)
-                        vertex.textureUV = glm::vec2(0);
+                        //set to invalid uv
+                        vertex.textureUV = glm::vec2(-1);
                     else    
                         vertex.textureUV = textureUVs[std::stoi(temp)-1];
                     //get normal
@@ -143,7 +153,7 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
             else if(tag == "usemtl")
             {
                 //TODO
-                //load material coeffs from mtl file with same basename!
+                //load material coeffs and texture from mtl file with same basename!
             }
             //clear any flags and reset buffer as empty
             oss.str("");
@@ -151,7 +161,7 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
         }
         mesh = new Mesh(shader, &vertices[0], vertices.size(), &indices[0], indices.size(), dynamic);
         //pass shader to mesh to allow Mesh to get locations of vertex attributes
-        model = new Model(shader, mesh, material);
+        model = new Model(shader, mesh, material,texture);
 
     }
   //  else

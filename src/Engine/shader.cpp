@@ -87,7 +87,13 @@ void Shader::setUniformFloat(std::string id, GLfloat value)
         glUniform1f(location, value);
 
 }
+void Shader::setUniformInt(std::string id, GLint value)
+{
+    int location = getUniformLocation(id);
+    if(location >= 0)
+        glUniform1i(location, value);
 
+}
 void Shader::setUniformArray(std::string id, const GLfloat* array, GLuint count)
 {
     int location = getUniformLocation(id);
