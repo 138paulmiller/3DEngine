@@ -14,8 +14,8 @@ void Camera::setPosition(glm::vec3 pos)
 }
 glm::mat4 Camera::getView()
 {
-//    return glm::lookAt(m_position, m_target, m_up);
-      return glm::lookAt(m_position, m_position+m_dir, m_up);
+    return glm::lookAt(m_position, m_dir, m_up);
+//      return glm::lookAt(m_position, m_position+m_dir, m_up);
 }
 
 glm::vec3 Camera::getEye()

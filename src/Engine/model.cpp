@@ -27,7 +27,7 @@ void Model::render( const glm::mat4& projection, const glm::mat4& view, const gl
     if(m_material)
         m_material->bind(); //bind material
     if(m_texture)
-        m_texture->bind();
+        m_texture->bind(m_shader);
     m_mesh->render();
 }
 void Model::setMaterial(Material* material)

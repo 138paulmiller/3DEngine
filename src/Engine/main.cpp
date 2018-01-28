@@ -55,30 +55,30 @@ int main(int argc, char**argv)
                 0.6*128//shiniess
             )
         };
-    Texture woodTexture(&shader, Wood::data, Wood::width, Wood::height, Texture::SAMPLE_0 );
+    Texture* woodTexture = Texture::load( "res/wood.png", Texture::SAMPLE_0 );
     int mouseX, mouseY;
 	float time;
 	while(window.isOpen())
     {
 		time += 0.01;
-    	//shader.setUniformFloat("time", time);
+    	shader.setUniformFloat("time", time);
         shader.setUniformVec3("ambientLight", glm::vec3(0,0,0));
-		//camera.setPosition(glm::vec3(0,0,sin(time)));
+		camera.setPosition(glm::vec3(cos(90),sin(45), 1));
         window.getMousePosition(mouseX, mouseY);
         window.clear(0,0,0,1);
 
 
 	    suzanne->setMaterial(&materials[(int)(time)%MATERIAL_NUM]);
-        suzanne->setTexture(&woodTexture);
+        suzanne->setTexture(woodTexture);
         suzanne->scale(glm::vec3(0.5,0.5,0.5));
-        suzanne->translate(glm::vec3(1.0,0.5,-1));
-        suzanne->rotate(time, glm::vec3(sin(time),cos(time),sin(cos(time))));
+        suzanne->translate(glm::vec3(0.2,0.3,-1));
+        //suzanne->rotate(time, glm::vec3(sin(time),cos(time),sin(cos(time))));
         suzanne->render(projection, camera.getView(), camera.getEye());
 		
 		armadillo->setMaterial(&materials[(int)(1+time)%MATERIAL_NUM]);
 		armadillo->scale(glm::vec3(1.0,1.0,1.0));
-        armadillo->translate(glm::vec3(-0.4,-1.0,-1));
-        armadillo->rotate(time, glm::vec3(0,1,0));
+        armadillo->translate(glm::vec3(-1.0,-1.0,-1));
+        armadillo->rotate(180, glm::vec3(0,1,0));
         armadillo->render(projection, camera.getView(), camera.getEye());
 
         window.update();

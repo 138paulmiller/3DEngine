@@ -18,13 +18,13 @@ public:
 		SAMPLE_1,SAMPLE_2, 
 		SAMPLE_3
 	};
-	Texture(Shader* shader, const GLchar* data, GLuint imgWidth, GLuint imgHeight, Sample sample);
+	Texture(const unsigned char* data, GLuint imgWidth, GLuint imgHeight, Sample sample);
 	virtual ~Texture();
 	//load from PNG file
-	//static Texture *loadPNG(std::string filename);
+	static Texture *load(std::string filename, Sample sample);
 	
 	//Bind for shader to use 
-	virtual void bind();
+	virtual void bind(Shader * shader);
 
 
 private:
@@ -32,8 +32,6 @@ private:
 	GLuint m_texture;
 	//uniform location
 	Sample m_sample;
-	//Shader to bind to
-	Shader * m_shader;
 };
 
 #endif

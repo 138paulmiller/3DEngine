@@ -25,24 +25,19 @@ in vec3 eye;
 
 void main()
 {
-
-    vec4 baseSample = texture2D(sampler0, textureUV);
+    vec3 diffuseSample = texture2D(sampler0, textureUV).xyz;
     
     //LIGHT TODO
-
-    vec3 l_pos  = vec3(0,0,0); //hard code for now
-
+    vec3 l_pos  = vec3(cos(time),sin(time),0); //hard code for now
     //diffuse color for light
     vec3 l_d = vec3(1.0,1.0,1.0);
     //specular color for lights
     vec3 l_s = vec3(1.0,1.0,1.0);
 
-  
-
 //for each light
 
     //incoming light (from light to point)
-    vec3 l  = normalize(l_pos - position );
+    vec3 l  = normalize(l_pos - position);
     
     //normal of the vertex
     vec3 n  = normalize(normal);
@@ -55,7 +50,7 @@ void main()
 
     //Diffuse - lambertian reflectance
     //cannot have negative intensity
-    vec3 diffuse =  max(0, dot(l, n)) * mtl.diffuse * l_d;
+    vec3 diffuse =  max(0, dot(l, n)) * mtl.diffuse * l_d * diffuseSample;
 
     //Specular - blinn-phong
     //vector half way bewteen v and l
@@ -70,6 +65,6 @@ void main()
     //phong = ambient + foreach(light){diffuse + specular } 
 
     gl_FragColor = vec4(ambient+diffuse+specular, 1.0);
-//    gl_FragColor = baseSample*vec4(ambient+diffuse+specular, 1.0);
+    
 
 }
