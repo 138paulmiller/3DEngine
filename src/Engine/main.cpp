@@ -63,7 +63,7 @@ int main(int argc, char**argv)
 		time += 0.01;
     	shader.setUniformFloat("time", time);
         shader.setUniformVec3("ambientLight", glm::vec3(0,0,0));
-		camera.setPosition(glm::vec3(cos(90),sin(45), 1));
+		camera.setPosition(glm::vec3(cos(time),sin(45), 1));
         window.getMousePosition(mouseX, mouseY);
         window.clear(0,0,0,1);
 
@@ -78,7 +78,7 @@ int main(int argc, char**argv)
 		armadillo->setMaterial(&materials[(int)(1+time)%MATERIAL_NUM]);
 		armadillo->scale(glm::vec3(1.0,1.0,1.0));
         armadillo->translate(glm::vec3(-1.0,-1.0,-1));
-        armadillo->rotate(180, glm::vec3(0,1,0));
+        armadillo->rotate(time, glm::vec3(0,1,0));
         armadillo->render(projection, camera.getView(), camera.getEye());
 
         window.update();
