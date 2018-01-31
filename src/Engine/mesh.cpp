@@ -86,12 +86,12 @@ Mesh::~Mesh()
 }
 
 //bind to use
-void Mesh::render()
+void Mesh::render(GLuint mode)
 {
     //bind the VAO and its element buffer
     glBindVertexArray(m_vertexArray);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
-    glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0);
+    glDrawElements(mode, m_numIndices, GL_UNSIGNED_INT, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }

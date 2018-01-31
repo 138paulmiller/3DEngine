@@ -1,7 +1,7 @@
 #include "model.h"
 
-Model::Model(Shader* shader, Mesh * mesh, Material * material, Texture* texture)
-    :m_shader(shader), m_mesh(mesh), m_material(material), m_texture(texture)
+Model::Model(Shader* shader, Mesh * mesh, Material * material)
+    :m_shader(shader), m_mesh(mesh), m_material(material)
 {
     //identity matrix
     m_scale = glm::mat4(1);
@@ -16,7 +16,7 @@ Model::~Model()
         delete m_mesh;
 }
 //view projection matrix,
-void Model::render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye )
+void Model::render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye, GLuint mode )
 {
     m_shader->use();
     //set modelMatrix in shader
@@ -25,20 +25,15 @@ void Model::render( const glm::mat4& projection, const glm::mat4& view, const gl
     m_shader->setUniformMatrix4("m_projection", projection);
     m_shader->setUniformMatrix4("m_model", getTransform());
     if(m_material)
-        m_material->bind(); //bind material
-    if(m_texture)
-        m_texture->bind(m_shader);
-    m_mesh->render();
+        m_material->bind(m_shader); //bind material
+    m_mesh->render(mode);
+    if(m_material)
+        m_material->unbind(m_shader);
 }
 void Model::setMaterial(Material* material)
 {
     if(material)
         m_material = material;
-}
-void Model::setTexture(Texture * texture)
-{
-    if(texture)
-        m_texture = texture;
 }
 
 void Model::setShader(Shader* shader)
@@ -61,6 +56,14 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
     Material *material  = 0;
     Mesh* mesh = 0;
     Texture* texture = 0;
+//TODO Load material files
+    //load phone coeeficients 
+    //map_kd refers to texture
+    //map_bump is normal map
+    //newmtl means create new material
+    //Generate a map of materials and
+    //map<string, Material>
+
     if(inFile.is_open())
     {
         std::string line, tag, temp;
@@ -81,73 +84,68 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
             {
                 glm::vec3 pos;
                 //parse x y z into vertex
-                std::getline(oss, temp, ' ');
-                pos.x = std::stof(temp);
-                std::getline(oss, temp, ' ');
-                pos.y = std::stof(temp);
-                std::getline(oss, temp, ' ');
-                pos.z = std::stof(temp);
+             	oss >>pos.x;
+				oss >>pos.y;
+				oss >>pos.z;
                 positions.push_back(pos);
             }
             else if(tag == "vn")
             {
                 glm::vec3 normal;
-                //parse x y z into vertex
-                std::getline(oss, temp, ' ');
-                normal.x = std::stof(temp);
-                std::getline(oss, temp, ' ');
-                normal.y = std::stof(temp);
-                std::getline(oss, temp, ' ');
-                normal.z = std::stof(temp);
+             	oss >>normal.x;
+				oss >>normal.y;
+				oss >>normal.z;
                 normals.push_back(normal);
             }
             else if(tag == "vt")
             {
                 glm::vec2 uv;
                 //parse x y z into vertex
-                std::getline(oss, temp, ' ');
-                uv.x = std::stof(temp);
-                std::getline(oss, temp, ' ');
-                uv.y = std::stof(temp);
+            	oss >>uv.x;
+				oss >>uv.y;
                 textureUVs.push_back(uv);
             }
             else if(tag == "f")
             {
 
-                //assume v/vt/vn is getline fails add vec(0)
+                //Face = v/vt/vn  v/vt/vn  v/vt/vn 
                 Vertex vertex;
-
+				int index;
                 //3 vertices for each
-                std::string lines[3];
-                std::getline(oss, lines[0], ' ');
-                std::getline(oss, lines[1], ' ');
-                std::getline(oss, lines[2], ' ');
-
+                std::string verts[3];
+                std::getline(oss, verts[0], ' ');
+                std::getline(oss, verts[1], ' ');
+                std::getline(oss, verts[2], ' ');
                 for(int i =0; i < 3; i++)
                 {
-                    //indices start at 1 for objs
+                    //indices start at 1 for objs so sub by 1!
                     // so grab from vector at i-1
                     //write as "v/vt/vn " to parse or v/vt/vn
                     oss.str("");
                     oss.clear();
-                    oss << lines[i] << ' ';
+                    oss << verts[i] << ' ';
                     //get position
-                    std::getline(oss, temp, '/');
-                    vertex.position = positions[std::stoi(temp)-1];
+                    oss >> index;
+					oss.get(); //skip / or \ws
+                    vertex.position = positions[index-1];
                     //get texture uv
-                    std::getline(oss, temp, '/');
-                    if(temp.size()==0)
-                        //set to invalid uv
-                        vertex.textureUV = glm::vec2(-1);
-                    else    
-                        vertex.textureUV = textureUVs[std::stoi(temp)-1];
-                    //get normal
-                    std::getline(oss, temp, ' ');
-                    vertex.normal = normals[std::stoi(temp)-1];
-                    //add vertex
-                    vertices.push_back(vertex);
-                    indices.push_back(indexCount++);
-                }
+					std::getline(oss, temp, '/');
+					
+					if(temp.size() > 0 )
+					{
+					    vertex.textureUV = textureUVs[std::stoi(temp)-1];
+					}
+					//get normal
+                    oss >> index;
+					if(index <= normals.size()) 
+						vertex.normal = normals[(index-1)];
+					else{
+						std::cout << index;
+						std::cin.get();						                    
+					}//add vertex
+					vertices.push_back(vertex);
+                    indices.push_back(indexCount++);            
+				}
 
             }
             else if(tag == "usemtl")
@@ -155,13 +153,13 @@ Model* Model::loadObj(Shader *shader, std::string objFile, bool dynamic)
                 //TODO
                 //load material coeffs and texture from mtl file with same basename!
             }
+
             //clear any flags and reset buffer as empty
             oss.str("");
-            oss.clear();
         }
         mesh = new Mesh(shader, &vertices[0], vertices.size(), &indices[0], indices.size(), dynamic);
         //pass shader to mesh to allow Mesh to get locations of vertex attributes
-        model = new Model(shader, mesh, material,texture);
+       model = new Model(shader, mesh, material);
 
     }
   //  else

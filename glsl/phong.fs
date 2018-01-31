@@ -17,6 +17,9 @@ uniform material mtl; //material definitions
 uniform float time;
 uniform sampler2D sampler0;
 uniform vec3 ambientLight; //background light
+//checks for if a sampler is used
+uniform int isSampler0; //1 if used, 0 if not 
+
 
 smooth in vec3 normal;	//vertex normals
 smooth in vec3 position;   //position
@@ -25,10 +28,12 @@ in vec3 eye;
 
 void main()
 {
-    vec3 diffuseSample = texture2D(sampler0, textureUV).xyz;
+	vec3 diffuseSample= vec3(1,1,1);
+	if(isSampler0 == 1)
+	   diffuseSample = texture2D(sampler0, textureUV).xyz;
     
     //LIGHT TODO
-    vec3 l_pos  = vec3(cos(time),sin(time),0); //hard code for now
+    vec3 l_pos  = vec3(0,sin(time),0); //hard code for now
     //diffuse color for light
     vec3 l_d = vec3(1.0,1.0,1.0);
     //specular color for lights
@@ -46,11 +51,12 @@ void main()
     vec3 v  = normalize(position - eye);
 
     //reflection from light
-    vec3 r  = 2*dot(l, n)*n-l;
+    vec3 r  = normalize(2*dot(l, n)*n-l);
 
     //Diffuse - lambertian reflectance
     //cannot have negative intensity
-    vec3 diffuse =  max(0, dot(l, n)) * mtl.diffuse * l_d * diffuseSample;
+    vec3 diffuse =  max(0, dot(n, l)) * mtl.diffuse *  l_d;
+	diffuse = diffuse*diffuseSample;
 
     //Specular - blinn-phong
     //vector half way bewteen v and l
@@ -58,7 +64,7 @@ void main()
     //vec3 specular = pow(dot(n, h), mtl.shininess)* mtl.specular * l_s;
 
     vec3 specular = pow(dot(r, v), mtl.shininess)* mtl.specular * l_s;
-//end for each light
+    //end for each light
     //Ambient - independent of camera
     vec3 ambient = mtl.ambient + ambientLight;
 

@@ -12,15 +12,14 @@
 class Model
 {
 public:
-    Model(Shader* shader, Mesh * mesh, Material * material, Texture *texture);
+    Model(Shader* shader, Mesh * mesh, Material * material);
     ~Model();
 
 
     void setMaterial(Material*material);
-    void setTexture(Texture* texture);
     void setShader(Shader* shader);
     //Render the model, with the given view projection matrix, and the viewer pos
-    void render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye );
+    void render( const glm::mat4& projection, const glm::mat4& view, const glm::vec3& eye, GLuint mode=GL_TRIANGLES );
     static Model* loadObj(Shader* shader, std::string objFile, bool dynamic = false);
 
     //Rotates along vecs where 1 in xyz or z is the axis
@@ -35,8 +34,8 @@ public:
 private:
     Mesh *m_mesh;
     Shader* m_shader;
+    //TODO Make a map of materials!
     Material *m_material; //shading coefficients
-    Texture *m_texture;
     //Translation, scale, and rotation matrix
     glm::mat4 m_scale;
     glm::mat4 m_translation;

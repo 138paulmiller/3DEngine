@@ -3,6 +3,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+
+Texture::Texture(const Texture& other)
+{
+	m_sample = other.m_sample;
+	m_texture = other.m_texture;
+}
 Texture::Texture(const unsigned char* data, GLuint imgWidth, GLuint imgHeight, Sample sample)
 {
 	m_texture;
@@ -42,6 +48,11 @@ void Texture::bind(Shader* shader)
 		//set the uniform for sampler[0-GL_MAX_TEXTURE]
 		shader->setUniformInt("sampler"+std::to_string(m_sample), m_sample);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
+	shader->setUniformInt("isSampler"+std::to_string(m_sample), 1);
 }
 
-
+void Texture::unbind(Shader* shader)
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+	shader->setUniformInt("isSampler"+std::to_string(m_sample), 0);
+}

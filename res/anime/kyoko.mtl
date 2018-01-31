@@ -1,0 +1,177 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.187496374)
+
+newmtl Model001_Material021
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_eye_sdw.png
+bump n.png
+map_bump n.png
+
+newmtl Model001_Material016
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_ult_002_base_05_d.png
+bump kas_ult_002_base_05_ln.png
+map_bump kas_ult_002_base_05_ln.png
+
+newmtl JoinedMaterial_#16
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_sitamatuge_base.png
+
+newmtl Model001_Material012
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_pony_02_base.png
+bump kas_pony_02_nrm.png
+map_bump kas_pony_02_nrm.png
+
+newmtl Model001_Material005
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd aya_face_base.png
+bump aya_face_nrm.png
+map_bump aya_face_nrm.png
+
+newmtl Model001_Material004
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd mis_parts_base.png
+bump kas_face_nrm_VLH2_PP1.png
+map_bump kas_face_nrm_VLH2_PP1.png
+
+newmtl Model001_Material010
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd nao_hair1_3_base.png
+bump nao_hair1_3_nrm.png
+map_bump nao_hair1_3_nrm.png
+
+newmtl Model001_Material014
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_pony_03_base.png
+bump kas_pony_03_nrm.png
+map_bump kas_pony_03_nrm.png
+
+newmtl Model001_Material009
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd htm_body_base.png
+bump htm_body_nrm_VLH2_PP1.png
+map_bump htm_body_nrm_VLH2_PP1.png
+
+newmtl Model001_Material003
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd mis_body_base.png
+bump mis_body_nrm.png
+map_bump mis_body_nrm.png
+
+newmtl Model001_Material011
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd mom_hair1_base.png
+bump mom_hair1_nrm.png
+map_bump mom_hair1_nrm.png
+
+newmtl Model001_Material015
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd cli_base.png
+bump cli_nm.png
+map_bump cli_nm.png
+
+newmtl JoinedMaterial_#19
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_face_base.png
+bump kas_face_nrm_VLH2_PP1.png
+map_bump kas_face_nrm_VLH2_PP1.png
+
+newmtl Model001_Material002
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd sox_.png
+bump sox_nrm.png
+map_bump sox_nrm.png
+
+newmtl Model001_Material001
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd ribbon_base.png
+bump ribbon_nrm.png
+map_bump ribbon_nrm.png
+
+newmtl Model001_Material013
+Kd 0.64 0.64 0.64
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Ns 9.60784
+illum 2
+map_Kd kas_pony_05_base.png
+bump kas_pony_05_nrm.png
+map_bump kas_pony_05_nrm.png
+

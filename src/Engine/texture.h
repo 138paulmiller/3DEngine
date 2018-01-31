@@ -18,6 +18,7 @@ public:
 		SAMPLE_1,SAMPLE_2, 
 		SAMPLE_3
 	};
+	Texture(const Texture& other);
 	Texture(const unsigned char* data, GLuint imgWidth, GLuint imgHeight, Sample sample);
 	virtual ~Texture();
 	//load from PNG file
@@ -25,6 +26,7 @@ public:
 	
 	//Bind for shader to use 
 	virtual void bind(Shader * shader);
+	virtual void unbind(Shader* shader);
 
 
 private:

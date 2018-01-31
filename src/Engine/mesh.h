@@ -21,7 +21,7 @@ public:
     Mesh(Shader* shader, Vertex *vertices, GLuint numVertices, GLuint * indices, GLuint numIndices, bool dynamic=false );
     ~Mesh();
     //bind to use
-    void render();
+    void render(GLuint mode=GL_TRIANGLES);
 
 private:
     //Vertex Attributes
